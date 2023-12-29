@@ -6,23 +6,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final SuccessUserHandler successUserHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
     private final UserService userService;
 
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
-        this.successUserHandler = successUserHandler;
+    public WebSecurityConfig(LoginSuccessHandler loginSuccessHandler, UserService userService) {
+        this.loginSuccessHandler = loginSuccessHandler;
         this.userService = userService;
     }
 
@@ -35,11 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/users").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin().successHandler(loginSuccessHandler)
                 .permitAll()
                 .and()
                 .logout()

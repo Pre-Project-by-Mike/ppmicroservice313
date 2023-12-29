@@ -3,8 +3,10 @@ package ru.itmentor.spring.boot_security.demo.configs;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.service.UserService;
+import ru.itmentor.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +14,12 @@ import java.io.IOException;
 import java.util.Set;
 
 @Component
-public class SuccessUserHandler implements AuthenticationSuccessHandler {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+    private final UserService userService;
+
+    public LoginSuccessHandler(UserService userService) {
+        this.userService = userService;
+    }
 
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override
@@ -21,7 +28,8 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         if ((roles.contains("ROLE_ADMIN"))) {
             httpServletResponse.sendRedirect("/admin");
         } else {
-            httpServletResponse.sendRedirect("/user");
+            User user = (User) userService.loadUserByUsername(authentication.getName());
+            httpServletResponse.sendRedirect("/users/"+user.getId());
         }
     }
 }
