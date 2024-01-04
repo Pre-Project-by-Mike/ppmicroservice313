@@ -6,7 +6,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
-import ru.itmentor.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             httpServletResponse.sendRedirect("/admin");
         } else {
             User user = (User) userService.loadUserByUsername(authentication.getName());
-            httpServletResponse.sendRedirect("/users/"+user.getId());
+            httpServletResponse.sendRedirect("/user/" + user.getId());
         }
     }
 }

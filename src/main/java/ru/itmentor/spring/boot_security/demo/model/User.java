@@ -18,7 +18,6 @@ public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "username")
     private String username;
 
@@ -37,6 +36,12 @@ public class User implements Serializable, UserDetails {
 
     public User(String password) {
         this.password = password;
+    }
+
+    public User(String username, String password, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Set<String> getRolesNames() {

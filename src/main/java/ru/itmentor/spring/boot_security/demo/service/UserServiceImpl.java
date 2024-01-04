@@ -23,22 +23,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userRepo.saveAndFlush(user);
+       return userRepo.saveAndFlush(user);
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public boolean deleteUser(Long id) {
         userRepo.deleteById(id);
+        return false;
     }
 
     @Override
-    public void updateUser(Long id, User updatedUser) {
+    public User updateUser(Long id, User updatedUser) {
         User userToBeUpdated = getUserById(id);
         userToBeUpdated.setUsername(updatedUser.getUsername());
         userToBeUpdated.setPassword(updatedUser.getPassword());
         userToBeUpdated.setRoles(updatedUser.getRoles());
+        return userToBeUpdated;
     }
 
     @Override

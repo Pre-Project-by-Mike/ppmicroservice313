@@ -12,7 +12,7 @@ import ru.itmentor.spring.boot_security.demo.service.UserService;
 import java.util.HashSet;
 import java.util.Set;
 
-@RestController
+@Controller
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
